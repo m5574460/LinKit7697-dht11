@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Temperature Chart Static</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="temperatureChart" style="width:1000px;height:500px;"></div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.get("/temp", function (data, status) {
+                var index = 0;
+                Plotly.plot("temperatureChart", [{
+                    y: data
+                }], {
+                        margin: { t: 0 }
+                    });
+                index = data.length;
+                setInterval(function () {
+                    $.get("/temp", function (data, status) {
+                        const difData = data.slice(index);
+                        Plotly.extendTraces(temperatureChart, { y: [difData] }, [0]);
+                        index = data.length;
+                    });
+                }, 1000);
+            });
+            // 當頁面視窗大小改變
+            window.onresize = function () {
+                // 改變plotly繪圖大小
+                Plotly.Plots.resize("temperatureChart");
+            };
+            // 使用d3.js
+            var d3 = Plotly.d3;
+            // 畫布寬度與長度佔比
+            var WIDTH_IN_PERCENT_OF_PARENT = 100,
+                HEIGHT_IN_PERCENT_OF_PARENT = 95;
+            // 選擇畫布並設定左跟上的預留比例
+            var gd3 = d3.select("div[id='temperatureChart']")
+                .style({
+                    width: WIDTH_IN_PERCENT_OF_PARENT + "%",
+                    "margin-left": (100 - WIDTH_IN_PERCENT_OF_PARENT) / 2 + "%",
+                    height: HEIGHT_IN_PERCENT_OF_PARENT + "vh",
+                    "margin-top": (100 - HEIGHT_IN_PERCENT_OF_PARENT) / 2 + "vh"
+                });
+        });
+    </script>
+</body>
+
+</html>
