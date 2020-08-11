@@ -11,13 +11,13 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 // wifi SSID (例如:ES302)
-char ssid[] = "ES715_TP_2.4G";
+char ssid[] = "wifi";
 
 // wifi 密碼
-char pass[] = "AI715nxt4391rcx";
+char pass[] = "password";
 
 // nodejs伺服器ip
-String host = "140.125.32.148";
+String host = "ip";
 
 // nodejs伺服器port
 uint16_t port = 4000;
